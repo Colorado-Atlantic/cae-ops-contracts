@@ -6,13 +6,7 @@ This package is the shared type layer between `cae-ops-api` (Flask backend) and 
 
 ## Install
 
-Requires a GitHub PAT with `contents:read` on this repo. Add to `~/.netrc`:
-
-```
-machine github.com login x-access-token password <YOUR_PAT>
-```
-
-Then install, pinned to a release tag:
+The repo is public — no auth needed. Install pinned to a release tag:
 
 ```bash
 pip install "cae-ops-contracts @ git+https://github.com/Colorado-Atlantic/cae-ops-contracts.git@v0.1.0"
