@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0] — 2026-06-20
+
+### Added
+- `paperwork` — paperwork/intake endpoint models (spec #101, ticket #1177):
+  intake queue list/upload/search/assign + by-trip and by-week paperwork views.
+
+## [0.2.0] — 2026-06-19
+
+### Added
+- `communications` — outgoing communications log models (spec #98)
+
 ## [0.1.0] — 2026-06-10
 
 Initial extraction from `Colorado-Atlantic/scheduling` (`api/models/`).
