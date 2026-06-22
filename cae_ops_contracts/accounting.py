@@ -158,3 +158,15 @@ class TripsFlexRequest(BaseModel):
 
 class TripsFlexResponse(BaseModel):
     model_config = ConfigDict(extra="allow")
+
+
+# ---------------------------------------------------------------------------
+# Accessorial fee type registry (spec #95)
+# ---------------------------------------------------------------------------
+
+class AccFeeTypesFlexRequest(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+class AccFeeTypesFlexResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")

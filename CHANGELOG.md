@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0] — 2026-06-22
+
+### Added
+- `accounting` — `AccFeeTypesFlexRequest` / `AccFeeTypesFlexResponse` for the
+  accessorial fee type registry admin routes (spec #95).
+
 ## [0.3.0] — 2026-06-20
 
 ### Added
