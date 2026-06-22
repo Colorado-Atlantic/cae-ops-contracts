@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] — 2026-06-22
+
+### Added
+- `dispatch_change_log` — `ChangeLogEntry` / `ChangeLogResponse` for the trip
+  dispatch change-log read endpoint (spec dispatch-change-log, PR #979).
+
 ## [0.4.0] — 2026-06-22
 
 ### Added
