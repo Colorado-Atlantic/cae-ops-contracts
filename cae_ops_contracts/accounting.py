@@ -170,3 +170,19 @@ class AccFeeTypesFlexRequest(BaseModel):
 
 class AccFeeTypesFlexResponse(BaseModel):
     model_config = ConfigDict(extra="allow")
+
+
+# ---------------------------------------------------------------------------
+# AXON Invoice Reconciliation (spec #120)
+# ---------------------------------------------------------------------------
+
+class AxonReconUploadResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+class AxonOrderHistoryUploadResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+class AxonEmailSearchResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
