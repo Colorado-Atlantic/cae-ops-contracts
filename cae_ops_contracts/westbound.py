@@ -784,8 +784,7 @@ class WbInboundOrder(BaseModel):
 
 
 class WbInboundTripSummary(BaseModel):
-    """One trip row in the inbound trip list. arrivedAt is null until the
-    arrival store lands (ticket #1347/#1348)."""
+    """One trip row in the inbound trip list."""
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -808,8 +807,7 @@ class WbInboundTripsResponse(BaseModel):
 
 
 class WbInboundTripResponse(BaseModel):
-    """GET /westbound/api/inbound/trip — per-trip BOL checklist. arrivedAt/By
-    are null until the arrival store lands (ticket #1347/#1348)."""
+    """GET /westbound/api/inbound/trip — per-trip BOL checklist."""
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -820,3 +818,22 @@ class WbInboundTripResponse(BaseModel):
     arrived_at: str | None = Field(alias="arrivedAt", default=None)
     arrived_by: str | None = Field(alias="arrivedBy", default=None)
     orders: list[WbInboundOrder] = Field(default_factory=list)
+
+
+class WbInboundArriveRequest(BaseModel):
+    """POST /westbound/api/inbound/trip/{trip}/arrive — mark or undo arrival."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    delivery_date: str = Field(alias="deliveryDate")
+    arrived: bool = True
+
+
+class WbInboundArriveResponse(BaseModel):
+    """Response for the arrive endpoint — reflects the current arrival state."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    trip_number: str = Field(alias="tripNumber")
+    arrived_at: str | None = Field(alias="arrivedAt", default=None)
+    arrived_by: str | None = Field(alias="arrivedBy", default=None)
