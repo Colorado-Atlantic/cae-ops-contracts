@@ -263,8 +263,7 @@ class DispatchPacketOrder(BaseModel):
 
 
 class DispatchPacketResponse(BaseModel):
-    """Per-trip dispatch packet summary (spec #125). departedAt/By are null
-    until the departure store lands (ticket #1341/#1343)."""
+    """Per-trip dispatch packet summary (spec #125)."""
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -275,3 +274,21 @@ class DispatchPacketResponse(BaseModel):
     departed_at: str | None = Field(alias="departedAt", default=None)
     departed_by: str | None = Field(alias="departedBy", default=None)
     orders: list[DispatchPacketOrder] = Field(default_factory=list)
+
+
+# ── Departure stamp models (POST /api/dispatch/{trip}/depart — spec #125 #1341) ──
+
+
+class MarkDepartedRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    ship_date: str = Field(alias="shipDate")   # ISO YYYY-MM-DD
+    departed: bool                              # True = mark, False = clear
+
+
+class DepartedStampResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    trip_number: str = Field(alias="tripNumber")
+    departed_at: str | None = Field(alias="departedAt", default=None)
+    departed_by: str | None = Field(alias="departedBy", default=None)
