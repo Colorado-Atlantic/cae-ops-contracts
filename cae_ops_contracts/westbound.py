@@ -776,6 +776,7 @@ class WbInboundOrder(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     cae_key: str = Field(alias="caeKey")
+    pickup: str = ""          # WB pickup location (the WB analog of EB's shipper)
     shipper: str = ""
     destination: str = ""
     po_number: str = Field(alias="poNumber", default="")
