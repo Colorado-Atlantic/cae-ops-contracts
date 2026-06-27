@@ -234,3 +234,44 @@ class AllocationNoteCreateRequest(BaseModel):
 
 class AllocationNoteDeleteRequest(BaseModel):
     note_id: int
+
+
+# ── Dispatch packet models (EB /eastbound/api/dispatch/packet — spec #125) ───
+
+
+class DispatchPacketLumper(BaseModel):
+    """Lumper requirement for a stop's destination, classified from the
+    destination's free-text lumper_fee attribute."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    type: str                                  # Comcheck | Credit Card | Relay | RFS | Other
+    amount: str = ""                           # parsed dollar amount e.g. "150"; "" if none
+    raw: str = ""                              # original lumper_fee string
+    actionable: bool = False                   # True for Comcheck / Credit Card (cash to send)
+
+
+class DispatchPacketOrder(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    cae_key: str = Field(alias="caeKey")
+    shipper: str = ""
+    destination: str = ""
+    po_number: str = Field(alias="poNumber", default="")
+    bol_in: bool = Field(alias="bolIn", default=False)
+    lumper: DispatchPacketLumper | None = None
+
+
+class DispatchPacketResponse(BaseModel):
+    """Per-trip dispatch packet summary (spec #125). departedAt/By are null
+    until the departure store lands (ticket #1341/#1343)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    ship_date: str = Field(alias="shipDate")
+    trip_number: str = Field(alias="tripNumber")
+    driver: str = ""
+    truck: str = ""
+    departed_at: str | None = Field(alias="departedAt", default=None)
+    departed_by: str | None = Field(alias="departedBy", default=None)
+    orders: list[DispatchPacketOrder] = Field(default_factory=list)
