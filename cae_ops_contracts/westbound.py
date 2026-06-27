@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 # ---------------------------------------------------------------------------
 # Re-export shared models so callers only need to import from here
@@ -761,3 +761,61 @@ class CustomerPrefsResponse(BaseModel):
 
 class CustomerPrefsRequest(BaseModel):
     model_config = ConfigDict(extra="allow")
+
+
+# ---------------------------------------------------------------------------
+# WB inbound paperwork workflow (Sunday) — spec #126
+# /westbound/api/inbound/* — camelCase wire keys per CONVENTIONS.md (new surface,
+# mirrors the EB dispatch packet sibling in eb_dispatch.py).
+# ---------------------------------------------------------------------------
+
+
+class WbInboundOrder(BaseModel):
+    """One order on a WB inbound trip checklist."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    cae_key: str = Field(alias="caeKey")
+    shipper: str = ""
+    destination: str = ""
+    po_number: str = Field(alias="poNumber", default="")
+    bol_in: bool = Field(alias="bolIn", default=False)
+
+
+class WbInboundTripSummary(BaseModel):
+    """One trip row in the inbound trip list. arrivedAt is null until the
+    arrival store lands (ticket #1347/#1348)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    trip_number: str = Field(alias="tripNumber")
+    driver: str = ""
+    truck: str = ""
+    stop_count: int = Field(alias="stopCount", default=0)
+    bol_in: int = Field(alias="bolIn", default=0)
+    bol_total: int = Field(alias="bolTotal", default=0)
+    arrived_at: str | None = Field(alias="arrivedAt", default=None)
+
+
+class WbInboundTripsResponse(BaseModel):
+    """GET /westbound/api/inbound/trips — inbound trips for a delivery date."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    delivery_date: str = Field(alias="deliveryDate")
+    trips: list[WbInboundTripSummary] = Field(default_factory=list)
+
+
+class WbInboundTripResponse(BaseModel):
+    """GET /westbound/api/inbound/trip — per-trip BOL checklist. arrivedAt/By
+    are null until the arrival store lands (ticket #1347/#1348)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    delivery_date: str = Field(alias="deliveryDate")
+    trip_number: str = Field(alias="tripNumber")
+    driver: str = ""
+    truck: str = ""
+    arrived_at: str | None = Field(alias="arrivedAt", default=None)
+    arrived_by: str | None = Field(alias="arrivedBy", default=None)
+    orders: list[WbInboundOrder] = Field(default_factory=list)
