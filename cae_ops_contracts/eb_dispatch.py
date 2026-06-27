@@ -292,3 +292,30 @@ class DepartedStampResponse(BaseModel):
     trip_number: str = Field(alias="tripNumber")
     departed_at: str | None = Field(alias="departedAt", default=None)
     departed_by: str | None = Field(alias="departedBy", default=None)
+
+
+# ── Dispatch packet list models (GET /eastbound/api/dispatch/packets — spec #125 #1344) ──
+
+
+class DispatchPacketTripRow(BaseModel):
+    """One trip row in the ship-date packet list."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    trip_number: str = Field(alias="tripNumber")
+    driver: str = ""
+    truck: str = ""
+    stop_count: int = Field(alias="stopCount", default=0)
+    bol_in: int = Field(alias="bolIn", default=0)
+    bol_total: int = Field(alias="bolTotal", default=0)
+    lumper_action_count: int = Field(alias="lumperActionCount", default=0)
+    departed_at: str | None = Field(alias="departedAt", default=None)
+
+
+class DispatchPacketListResponse(BaseModel):
+    """All trips for a given ship date (spec #125, ticket #1344)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    ship_date: str = Field(alias="shipDate")
+    trips: list[DispatchPacketTripRow] = Field(default_factory=list)
