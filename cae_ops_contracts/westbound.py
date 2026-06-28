@@ -776,10 +776,12 @@ class WbInboundOrder(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     cae_key: str = Field(alias="caeKey")
+    stop_number: str = Field(alias="stopNumber", default="")
     pickup: str = ""          # WB pickup location (the WB analog of EB's shipper)
     shipper: str = ""
     destination: str = ""
     po_number: str = Field(alias="poNumber", default="")
+    bol_received: bool = Field(alias="bolReceived", default=False)
     bol_in: bool = Field(alias="bolIn", default=False)
 
 
@@ -837,3 +839,21 @@ class WbInboundArriveResponse(BaseModel):
     trip_number: str = Field(alias="tripNumber")
     arrived_at: str | None = Field(alias="arrivedAt", default=None)
     arrived_by: str | None = Field(alias="arrivedBy", default=None)
+
+
+class WbInboundBolReceiveRequest(BaseModel):
+    """POST /westbound/api/inbound/order/{caeKey}/bol-received — toggle visual BOL confirmation."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    delivery_date: str = Field(alias="deliveryDate")
+    received: bool = True
+
+
+class WbInboundBolReceiveResponse(BaseModel):
+    """Response for the bol-received endpoint."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    cae_key: str = Field(alias="caeKey")
+    bol_received: bool = Field(alias="bolReceived")
