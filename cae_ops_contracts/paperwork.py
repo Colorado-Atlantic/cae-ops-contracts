@@ -102,6 +102,15 @@ class IntakeAssignResponse(BaseModel):
     summary: str
 
 
+class IntakeDeleteResponse(BaseModel):
+    """DELETE /api/delete/<id> response."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    deleted: bool
+    queue_id: int = Field(alias="queueId")
+
+
 # ── Paperwork views (by trip / by week) ──────────────────────────────────
 
 
