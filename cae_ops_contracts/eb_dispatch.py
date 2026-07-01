@@ -294,6 +294,18 @@ class DepartedStampResponse(BaseModel):
     departed_by: str | None = Field(alias="departedBy", default=None)
 
 
+# ── Paperwork upload models (POST /api/dispatch/{trip}/paperwork — spec #125 #1348) ──
+
+
+class EbDispatchPaperworkUploadResponse(BaseModel):
+    """BOL filed against a known trip order (spec #125, ticket #1348)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    evidence_id: int = Field(alias="evidenceId")
+    filed: str
+
+
 # ── Dispatch packet list models (GET /eastbound/api/dispatch/packets — spec #125 #1344) ──
 
 
