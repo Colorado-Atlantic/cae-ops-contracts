@@ -331,3 +331,43 @@ class DispatchPacketListResponse(BaseModel):
 
     ship_date: str = Field(alias="shipDate")
     trips: list[DispatchPacketTripRow] = Field(default_factory=list)
+
+
+# ── Dispatch packet by-pickup models (GET /eastbound/api/dispatch/packets/by-pickup) ──
+
+
+class DispatchPacketPickupOrder(BaseModel):
+    """One order within a pickup group — DispatchPacketOrder plus its trip #,
+    since a pickup group spans multiple trips."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    cae_key: str = Field(alias="caeKey")
+    shipper: str = ""
+    destination: str = ""
+    po_number: str = Field(alias="poNumber", default="")
+    bol_in: bool = Field(alias="bolIn", default=False)
+    lumper: DispatchPacketLumper | None = None
+    trip_number: str = Field(alias="tripNumber", default="")
+
+
+class DispatchPacketPickupGroup(BaseModel):
+    """One pickup/shipper group for a ship date, across all trips."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str
+    order_count: int = Field(alias="orderCount", default=0)
+    bol_in: int = Field(alias="bolIn", default=0)
+    bol_total: int = Field(alias="bolTotal", default=0)
+    completion_pct: int = Field(alias="completionPct", default=0)
+    orders: list[DispatchPacketPickupOrder] = Field(default_factory=list)
+
+
+class DispatchPacketPickupGroupsResponse(BaseModel):
+    """All orders for a ship date, grouped by pickup/shipper (spec #125 follow-on)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    ship_date: str = Field(alias="shipDate")
+    pickups: list[DispatchPacketPickupGroup] = Field(default_factory=list)
